@@ -4,7 +4,7 @@
 
     if (IS_LOGIN) {
         $title = 'Hành động';
-        $entry = isset($_POST['entry']) ? $_POST['entry'] : [];
+        $entry = isset($_POST['entry']) ? $_POST['entry'] : array();
         $option = isset($_POST['option']) ? intval($_POST['option']) : -1;
 
         if ($dir == null || !is_dir(processDirectory($dir))) {
