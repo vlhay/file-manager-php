@@ -361,7 +361,8 @@
 
         if ($handler !== false) {
             if ($isParent && $old != '/') {
-                $end = $new = $new . '/' . end(explode('/', $old));
+                $s = explode('/', $old);
+                $end = $new = $new . '/' . end($s);
 
                 if (@is_file($end) || (!@is_dir($end) && !@mkdir($end)))
                     return false;
