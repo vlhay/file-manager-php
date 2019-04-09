@@ -1,2 +1,2 @@
-# php-file-manager
+# manager
 PHP File Manager by Izero
