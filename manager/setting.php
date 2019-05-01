@@ -83,7 +83,8 @@
         </div>
         <div class="tips"><img src="icon/tips.png"/> Mật khẩu để trống nếu không muốn thay đổi, các phân trang để bằng 0 nếu không muốn phân trang</div>
         <div class="title">Chức năng</div>
-        <ul class="list">';
+        <ul class="list">
+          <li><img src="icon/create.png"/> <a href="update.php">Cập nhật</a></li>';
 
         if ($ref != null)
             echo '<li><img src="icon/back.png"/> <a href="' . $ref . '">Quay lại</a></li>';
