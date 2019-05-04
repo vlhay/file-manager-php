@@ -16,7 +16,7 @@
 
     include 'version.inc.php';
 
-    $server = 'https://raw.githubusercontent.com/PMTpro/manager/develop/update.json';
+    $server = 'https://raw.githubusercontent.com/PMTpro/manager/develop/manager/update.json';
     $info = json_decode(grab($server), 1);
     $info['count'] = isset($info['count']) ? $info['count'] : 0;
     $info['version'] = isset($info['version']) ? $info['version'] : '';
@@ -40,11 +40,11 @@
                 $zip = new PclZip($file);
 
                 if ($zip->extract(PCLZIP_OPT_PATH, dirname(__FILE__), PCLZIP_OPT_REPLACE_NEWER) != false) {
-                    @unlink($file);
+                    unlink($file);
 
                     goURL('update.php');
                 } else {
-                    echo '<div class="list">Lỗi</div>';
+                    echo '<div class="list">Lỗi! Không thể cài đặt bản cập nhật</div>';
                 }
 
                 /*
@@ -60,11 +60,13 @@
                 }
             */
             } else {
-                echo '<div class="list">Lỗi</div>';
+                echo '<div class="list">Lỗi! Không thể tải bản  cập nhật</div>';
             }
         } else {
             $token = time();
             $_SESSION['token'] = $token;
+
+            // print_r($info);
 
             echo '<div class="list">
                 <span>Có phiên bản mới, bạn có muốn cập nhật?</span><br />
