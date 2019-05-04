@@ -96,7 +96,28 @@
                 }
             }
 
+            $error_syntax = null;
+            $isExecute = isFunctionExecEnable();
+
+            if ($isExecute && isset($_POST['s_check_syntax'])) {
+                @exec(getPathPHP() . ' -c -f -l ' . $path, $output, $value);
+
+                if ($value == -1)
+                    $error_syntax = 'Không thể kiểm tra lỗi';
+                else if ($value == 255 || count($output) == 3)
+                    $error_syntax = $output[1];
+                else
+                    $error_syntax = 'Không có lỗi';
+            }
+
             echo $notice;
+
+            if ($error_syntax != null) {
+                echo '<div class="list">
+                    <span class="bull">&bull; </span><span><strong>Kiểm tra lỗi</strong><hr/>
+                    <div class="break-word">' . $error_syntax . '</div>
+                </div>';
+            }
 
             echo '<div class="list">
                 <span class="bull">&bull; </span><span>' . printPath($dir, true) . '</span><hr/>
@@ -116,8 +137,8 @@
                         <span class="bull">&bull; </span>Thay thế:<br/>
                         <input type="text" name="replace" value=""/>
                     </div>
-                    <div class="input_action">
-                        <hr/>
+                    <div class="input_action">' .
+                        ($isExecute && strtolower(getFormat($name)) == 'php' ? '<input type="checkbox" name="s_check_syntax" value="1"' . (isset($_POST['s_check_syntax']) ? ' checked="checked"' : null) . '/>Kiểm tra lỗi' : '') . '<hr/>
                         <input type="submit" name="s_save" value="Lưu lại"/>
                     </div>
                 </form>';
@@ -144,5 +165,3 @@
     } else {
         goURL('login.php');
     }
-
-?>

@@ -2,7 +2,7 @@
 
         </div>
         <div id="footer">
-            <span>&bull; &bull; &bull; PMTpro &bull; &bull; &bull;</span>
+            <span>&bull; &bull; IZeroCs &bull; &bull;</span>
         </div>
     </body>
 </html>
