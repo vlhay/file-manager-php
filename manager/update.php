@@ -16,7 +16,7 @@
 
     include 'version.inc.php';
 
-    $server = 'http://localhost:8000/manager/update.json.php';
+    $server = 'https://raw.githubusercontent.com/PMTpro/manager/develop/update.json';
     $info = json_decode(grab($server), 1);
     $info['count'] = isset($info['count']) ? $info['count'] : 0;
     $info['version'] = isset($info['version']) ? $info['version'] : '';
