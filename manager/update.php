@@ -40,7 +40,7 @@
                 $zip = new PclZip($file);
 
                 if ($zip->extract(PCLZIP_OPT_PATH, dirname(__FILE__), PCLZIP_OPT_REPLACE_NEWER) != false) {
-                    unlink($file);
+                    @unlink($file);
 
                     goURL('update.php');
                 } else {
