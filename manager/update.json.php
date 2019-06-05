@@ -1,8 +1,8 @@
 <?php
 
 $data = array(
-    'count' => '1154',
-    'version' => '1.15.24',
+    'count' => '4',
+    'version' => '1.0',
     'link' => 'http://localhost:8000/manager.zip'
 );
 

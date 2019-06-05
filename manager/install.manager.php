@@ -34,4 +34,7 @@ $zip = new ZipArchive;
 
 $zip->open($saveTo); 
 $zip->extractTo($path); 
-$zip->close(); 
+$zip->close();
+
+echo 'OK!';
+
