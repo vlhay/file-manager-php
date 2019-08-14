@@ -79,7 +79,8 @@ if ($_POST) {
     // check if query is SELECT...FROM..
 
     if (preg_match('/^SELECT(.*)FROM(.*)/i', strtoupper($_POST['sql'])) && $how_many == 1) {
-        $how_many_html = array_pop($db->query("SELECT FOUND_ROWS()")->fetch_row());
+        $stmt = $db->query("SELECT FOUND_ROWS()")->fetch_row();
+        $how_many_html = array_pop($stmt);
         $new_tb = $db->query("EXPLAIN " . $_POST['sql'])->fetch_array();
         $new_tb = $new_tb[2];
     }
