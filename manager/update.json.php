@@ -1,13 +1,11 @@
 <?php
 
 $data = array(
-    'count' => '5',
+    'count' => '4',
     'version' => '1.0',
-    'link' => 'https://raw.githubusercontent.com/PMTpro/manager/develop/manager/manager.zip'
+    'link' => 'http://localhost:8000/manager.zip'
 );
 
 header("Content-type: application/json; charset=utf-8");
-
 echo json_encode($data);
-
 exit();
