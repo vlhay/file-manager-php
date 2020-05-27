@@ -81,7 +81,7 @@
                 <input type="submit" name="submit" value="Lưu"/>
             </form>
         </div>
-        <div class="tips"><img src="icon/tips.png"/> Mật khẩu để trống nếu không muốn thay đổi, các phân trang để bằng 0 nếu không muốn phân trang</div>
+        <div class="tips"><img src="icon/tips.png"/> Mật khẩu để trống nếu không muốn thay đổi</div>
         <div class="title">Chức năng</div>
         <ul class="list">
           <li><img src="icon/create.png"/> <a href="update.php">Cập nhật</a></li>';
