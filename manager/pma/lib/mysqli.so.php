@@ -49,10 +49,13 @@ class mysqli {
     {
         $delimiter = ';'; // here is the delimiter edit this if you have a more "special" query
         $lines = preg_split("/(rn|n|r)/", $q);
+		
         foreach($lines as $line) {
             $qr[] = $line;
+			
             if (preg_match('~' . preg_quote($delimiter, '~') . 's*$~iS', end($qr)) === 1) {
                 $query = mysql_query(implode('', $qr));
+				
                 if (!$query) {
                     $this->error = @mysql_error();
                     return false;

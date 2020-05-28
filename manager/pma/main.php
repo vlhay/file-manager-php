@@ -58,7 +58,7 @@ elseif ($_GET['act'] == 'dropdb') {
         if ($db_name != '') {
             if (!$_POST['ok']) {
                 $_msg[0].= "<i>" . htmlentities($db_name) . "</i><br/> ";
-                $_msg[1].= "<input type='hidden' name='i[]' value='" . htmlentities($db_name) . "'>n";
+                $_msg[1].= "<input type='hidden' name='i[]' value='" . htmlentities($db_name) . "'>";
             } else {
                 if ($result = $db->query("DROP DATABASE IF EXISTS " . PMA_bkq($db_name))) {
                     $_msg.= htmlentities($db_name) . ", ";

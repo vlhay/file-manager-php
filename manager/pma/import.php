@@ -4,8 +4,6 @@
 // ionutvmi@gmail.com
 // master-land.net
 
-@ini_set('memory_limit', '64M');
-@set_time_limit(0);
 
 include 'lib/settings.php';
 include 'lib/pagination.class.php';
@@ -65,8 +63,10 @@ if ($_POST) {
     }
 
     // sending query
+//print_r($_sql);
 
     $result = $db->multi_query($_sql);
+	
     if (!$result) {
         $_err[] = $db->error;
     } else {

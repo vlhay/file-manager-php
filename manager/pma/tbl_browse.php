@@ -135,7 +135,7 @@ if ($act == 'edit') {
             }
             else {
                 $_msg[0].= "<i>" . htmlentities($j[$v]) . "</i><br/> ";
-                $_msg[1].= "<input type='hidden' name='i[]' value='" . $r . "'>n<input type='hidden' name='j[]' value='" . urlencode($j[$v]) . "'>n";
+                $_msg[1].= "<input type='hidden' name='i[]' value='" . $r . "'><input type='hidden' name='j[]' value='" . urlencode($j[$v]) . "'>";
                 ++$v;
             }
         }

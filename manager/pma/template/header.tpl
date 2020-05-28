@@ -2,10 +2,10 @@
 // wap phpmyadmin
 // ionutvmi@gmail.com
 // master-land.net
-header("Content-type: text/html; charset=utf-8");
-?>
 
-<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd"> <html xmlns="http://www.w3.org/1999/xhtml">
+// header("Content-type: text/html; charset=utf-8");
+
+?><!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd"> <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title><?php echo $pma->title; ?></title>
 <link rel="stylesheet" type="text/css" href="<?php echo $pma->tpl; ?>style/style.css<?php echo $pma->dev ? '?' . time() : '' ?>">
