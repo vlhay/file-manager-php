@@ -28,7 +28,7 @@
             $title .= ':' . $name;
 
             include_once 'header.php';
-            include_once 'pclzip.class.php';
+            include_once 'pclzip.lib.php';
 
             $path = isset($_GET['path']) && !empty($_GET['path']) ? processPathZip($_GET['path']) : null;
             $dir = processDirectory($dir);

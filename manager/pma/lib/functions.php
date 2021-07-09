@@ -43,10 +43,10 @@ function PMA_bkq($a_name)
     }
 } // end of the 'PMA_bkq()' function
 
-function pma_img($src)
+function pma_img($src): string
 {
     global $pma;
-    if (!$_SESSION['noimg']) return "<img class='icon' src='" . $pma->tpl . "style/img/$src'>";
+    return "<img class='icon' src='" . $pma->tpl . "style/img/$src'>";
 }
 
 /*
@@ -441,14 +441,6 @@ function stripslashes_recursive($value)
     }
     else {
         return stripslashes($value);
-    }
-}
-
-function remove_magic_quotes()
-{
-    if (get_magic_quotes_gpc()) {
-        $_GET = stripslashes_recursive($_GET);
-        $_POST = stripslashes_recursive($_POST);
     }
 }
 

@@ -17,7 +17,7 @@ $_var->perp = array(
     "80",
     "90"
 );
-$_var->home = "<a href='main.php'>" . (!$_SESSION['noimg'] ? "<img src='" . $pma->tpl . "style/img/b_home.png'>" : "") . $lang->home . "</a> &#187; ";
+$_var->home = "<a href='main.php'>" . "<img src='" . $pma->tpl . "style/img/b_home.png'>" . $lang->home . "</a> &#187; ";
 $_var->ColumnTypes = array(
 
     // most used

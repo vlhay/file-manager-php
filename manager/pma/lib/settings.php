@@ -25,4 +25,3 @@ $lang = (object)$lang;
 
 include dirname(dirname(__FILE__)) . '/lib/vars.php';
 include dirname(dirname(__FILE__)) . '/lib/functions.php';
-remove_magic_quotes();

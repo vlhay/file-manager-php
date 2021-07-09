@@ -35,7 +35,7 @@
 
             if (import($info['link'], $file)) {
  
-                include 'pclzip.class.php';
+                include 'pclzip.lib.php';
 
                 $zip = new PclZip($file);
 

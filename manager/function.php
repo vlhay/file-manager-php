@@ -7,8 +7,37 @@
 
     ob_start();
 
+    // Check require function
     {
-        $dir = function_exists('getenv') ? getenv('SCRIPT_NAME') : $_SERVER['SCRIPT_NAME'];
+        $require = [
+            'curl_init',
+            'filter_var',
+            'json_encode',
+            'json_decode',
+            'getenv'
+        ];
+
+        foreach ($require as $function) {
+            if (!function_exists($function)) {
+                exit($function . ' not found');
+            }
+        }
+    }
+
+
+    // Check require class
+    {
+        $require = [];
+
+        foreach ($require as $class) {
+            if (!class_exists($class)) {
+                exit($class . ' not found');
+            }
+        }
+    }
+
+    {
+        $dir = getenv('SCRIPT_NAME');
         $dir = str_replace('\\', '/', $dir);
         $dir = strpos($dir, '/') !== false ? dirname($dir) : null;
         $dir = str_replace('\\', '/', $dir);
@@ -21,59 +50,44 @@
         unset($dir);
     }
 
-    if (get_magic_quotes_gpc()) {
-        if (isset($_POST) && is_array($_POST)) {
-            foreach ($_POST AS $key => $value)
-                $_POST[$key] = is_string($value) ? stripslashes($value) : $value;
-        }
-
-        if (isset($_GET) && is_array($_GET)) {
-            foreach ($_GET AS $key => $value)
-                $_GET[$key] = is_string($value) ? stripslashes($value) : $value;
-        }
-    }
-
     define('REALPATH', realpath('./'));
-    define('PATH_CONFIG', 'config.inc.php');
-    define('LOGIN_USERNAME_DEFAULT', 'Admin');
-    define('LOGIN_PASSWORD_DEFAULT', '12345');
-    define('PAGE_LIST_DEFAULT', 120);
-    define('PAGE_FILE_EDIT_DEFAULT', 120);
-    define('PAGE_FILE_EDIT_LINE_DEFAULT', 120);
+    const PATH_CONFIG                 = 'config.inc.php';
+    const LOGIN_USERNAME_DEFAULT      = 'Admin';
+    const LOGIN_PASSWORD_DEFAULT      = '12345';
+    const PAGE_LIST_DEFAULT           = 120;
+    const PAGE_FILE_EDIT_DEFAULT      = 120;
+    const PAGE_FILE_EDIT_LINE_DEFAULT = 120;
 
-    define('PAGE_NUMBER', 7);
-    define('PAGE_URL_DEFAULT', 'default');
-    define('PAGE_URL_START', 'start');
-    define('PAGE_URL_END', 'end');
+    const PAGE_NUMBER      = 7;
+    const PAGE_URL_DEFAULT = 'default';
+    const PAGE_URL_START   = 'start';
+    const PAGE_URL_END     = 'end';
 
-    define('DEVELOPMENT', false);
-    define('NAME_SUBSTR', 8);
-    define('NAME_SUBSTR_ELLIPSIS', '...');
+    const DEVELOPMENT          = false;
+    const NAME_SUBSTR          = 8;
+    const NAME_SUBSTR_ELLIPSIS = '...';
 
     $configs = array();
-    $jsons = null;
-
-    if (!function_exists('json_encode') || !function_exists('json_decode'))
-        include_once 'json.class.php';
+    $jsons   = null;
 
     $pages = array(
-        'current' => 1,
-        'total' => 0,
-        'paramater_0'=> null,
+        'current'     => 1,
+        'total'       => 0,
+        'paramater_0' => null,
         'paramater_1' => null
     );
 
     $formats = array(
-        'image' => array('png', 'ico', 'jpg', 'jpeg', 'gif', 'bmp'),
-        'text' => array('cpp', 'css', 'csv', 'h', 'htaccess', 'html', 'java', 'js', 'lng', 'pas', 'php', 'pl', 'py', 'rb', 'rss', 'sh', 'svg', 'tpl', 'txt', 'xml', 'ini', 'cnf', 'config', 'conf', 'conv'),
-        'archive' => array('7z', 'rar', 'tar', 'tarz', 'zip'),
-        'audio' => array('acc', 'midi', 'mp3', 'mp4', 'swf', 'wav'),
-        'font' => array('afm', 'bdf', 'otf', 'pcf', 'snf', 'ttf'),
-        'binary' => array('pak', 'deb', 'dat'),
+        'image'    => array('png', 'ico', 'jpg', 'jpeg', 'gif', 'bmp'),
+        'text'     => array('cpp', 'css', 'csv', 'h', 'htaccess', 'html', 'java', 'js', 'lng', 'pas', 'php', 'pl', 'py', 'rb', 'rss', 'sh', 'svg', 'tpl', 'txt', 'xml', 'ini', 'cnf', 'config', 'conf', 'conv'),
+        'archive'  => array('7z', 'rar', 'tar', 'tarz', 'zip'),
+        'audio'    => array('acc', 'midi', 'mp3', 'mp4', 'swf', 'wav'),
+        'font'     => array('afm', 'bdf', 'otf', 'pcf', 'snf', 'ttf'),
+        'binary'   => array('pak', 'deb', 'dat'),
         'document' => array('pdf'),
-        'source' => array('changelog', 'copyright', 'license', 'readme'),
-        'zip' => array('zip', 'jar'),
-        'other' => array('rpm', 'sql')
+        'source'   => array('changelog', 'copyright', 'license', 'readme'),
+        'zip'      => array('zip', 'jar'),
+        'other'    => array('rpm', 'sql')
     );
 
     if (is_file(PATH_CONFIG))
@@ -82,25 +96,23 @@
     if (count($configs) == 0)
         setcookie('login', null, 0);
 
-    if (!isset($configs['username']) || 
+    if (!isset($configs['username']) ||
         !isset($configs['password']) ||
         !isset($configs['page_list']) ||
         !isset($configs['page_file_edit']) ||
-        !isset($configs['page_file_edit_line']))
-    {
+        !isset($configs['page_file_edit_line'])) {
         define('IS_CONFIG_UPDATE', true);
     } else {
         define('IS_CONFIG_UPDATE', false);
     }
 
     if (!IS_CONFIG_UPDATE && (
-        !preg_match('#\\b[0-9]+\\b#', $configs['page_list']) ||
-        !preg_match('#\\b[0-9]+\\b#', $configs['page_file_edit']) ||
-        !preg_match('#\\b[0-9]+\\b#', $configs['page_file_edit_line']) ||
+            !preg_match('#\\b[0-9]+\\b#', $configs['page_list']) ||
+            !preg_match('#\\b[0-9]+\\b#', $configs['page_file_edit']) ||
+            !preg_match('#\\b[0-9]+\\b#', $configs['page_file_edit_line']) ||
 
-        empty($configs['username']) || $configs['username'] == null ||
-        empty($configs['password']) || $configs['password'] == null))
-    {
+            empty($configs['username']) || $configs['username'] == null ||
+            empty($configs['password']) || $configs['password'] == null)) {
         define('IS_CONFIG_ERROR', true);
     } else {
         define('IS_CONFIG_ERROR', false);
@@ -121,14 +133,14 @@
     $login = (isset($_COOKIE['login']) && $_COOKIE['login'] == $configs['password']) ? true : false;
     define('IS_LOGIN', $login);
 
-    function createConfig($username = LOGIN_USERNAME_DEFAULT, $password = LOGIN_PASSWORD_DEFAULT, $pageList = PAGE_LIST_DEFAULT, $pageFileEdit = PAGE_FILE_EDIT_DEFAULT, $pageFileEditLine = PAGE_FILE_EDIT_LINE_DEFAULT,  $isEncodePassword = true)
+    function createConfig($username = LOGIN_USERNAME_DEFAULT, $password = LOGIN_PASSWORD_DEFAULT, $pageList = PAGE_LIST_DEFAULT, $pageFileEdit = PAGE_FILE_EDIT_DEFAULT, $pageFileEditLine = PAGE_FILE_EDIT_LINE_DEFAULT, $isEncodePassword = true)
     {
         $content = "<?php if (!defined('ACCESS')) die('Not access'); else \$configs = array(";
-            $content .= "'username' => '$username', ";
-            $content .= "'password' => '" . ($isEncodePassword ? getPasswordEncode($password) : $password) . "', ";
-            $content .= "'page_list' => '$pageList', ";
-            $content .= "'page_file_edit' => '$pageFileEdit', ";
-            $content .= "'page_file_edit_line' => '$pageFileEditLine'";
+        $content .= "'username' => '$username', ";
+        $content .= "'password' => '" . ($isEncodePassword ? getPasswordEncode($password) : $password) . "', ";
+        $content .= "'page_list' => '$pageList', ";
+        $content .= "'page_file_edit' => '$pageFileEdit', ";
+        $content .= "'page_file_edit_line' => '$pageFileEditLine'";
         $content .= '); ?>';
 
         if (@is_file(REALPATH . '/' . PATH_CONFIG))
@@ -171,7 +183,8 @@
     }
 
     function isFormatText($name)
-    { global $formats;
+    {
+        global $formats;
 
         $format = getFormat($name);
 
@@ -182,14 +195,15 @@
     }
 
     function isFormatUnknown($name)
-    { global $formats;
+    {
+        global $formats;
 
         $format = getFormat($name);
 
         if ($format == null)
             return true;
 
-        foreach ($formats AS $array)
+        foreach ($formats as $array)
             if (in_array($format, $array))
                 return false;
 
@@ -198,10 +212,7 @@
 
     function isURL($url)
     {
-        if (function_exists('filter_var'))
-            return filter_var($url, FILTER_VALIDATE_URL);
-        else
-            return preg_match("/^(http|https|ftp):\/\/([A-Z0-9][A-Z0-9_-]*(?:\.[A-Z0-9][A-Z0-9_-]*)+):?(\d+)?\/?/i", $url);
+        return filter_var($url, FILTER_VALIDATE_URL);
     }
 
     function processDirectory($var)
@@ -254,7 +265,7 @@
         $handler = @scandir($path);
 
         if ($handler !== false) {
-            foreach ($handler AS $entry) {
+            foreach ($handler as $entry) {
                 if ($entry != '.' && $entry != '..') {
                     $pa = $path . '/' . $entry;
 
@@ -278,7 +289,7 @@
 
     function rrms($entrys, $dir)
     {
-        foreach ($entrys AS $e) {
+        foreach ($entrys as $e) {
             $pa = $dir . '/' . $e;
 
             if (@is_file($pa)) {
@@ -309,7 +320,7 @@
                 return false;
             }
 
-            foreach ($handler AS $entry) {
+            foreach ($handler as $entry) {
                 if ($entry != '.' && $entry != '..') {
                     $paOld = $old . '/' . $entry;
                     $paNew = $new . '/' . $entry;
@@ -334,7 +345,7 @@
 
     function copys($entrys, $dir, $path)
     {
-        foreach ($entrys AS $e) {
+        foreach ($entrys as $e) {
             $pa = $dir . '/' . $e;
 
             if (isPathNotPermission(processDirectory($path . '/' . $e))) {
@@ -359,7 +370,7 @@
 
         if ($handler !== false) {
             if ($isParent && $old != '/') {
-                $s = explode('/', $old);
+                $s   = explode('/', $old);
                 $end = $new = $new . '/' . end($s);
 
                 if (@is_file($end) || (!@is_dir($end) && !@mkdir($end)))
@@ -368,7 +379,7 @@
                 return false;
             }
 
-            foreach ($handler AS $entry) {
+            foreach ($handler as $entry) {
                 if ($entry != '.' && $entry != '..') {
                     $paOld = $old . '/' . $entry;
                     $paNew = $new . '/' . $entry;
@@ -395,7 +406,7 @@
 
     function moves($entrys, $dir, $path)
     {
-        foreach ($entrys AS $e) {
+        foreach ($entrys as $e) {
             $pa = $dir . '/' . $e;
 
             if (isPathNotPermission(processDirectory($path . '/' . $e))) {
@@ -418,7 +429,7 @@
 
     function zipdir($path, $file, $isDelete = false)
     {
-        include 'pclzip.class.php';
+        include 'pclzip.lib.php';
 
         if (@is_file($file))
             @unlink($file);
@@ -437,14 +448,14 @@
 
     function zips($dir, $entrys, $file, $isDelete = false)
     {
-        include 'pclzip.class.php';
+        include 'pclzip.lib.php';
 
         if (@is_file($file))
             @unlink($file);
 
         $zip = new PclZip($file);
 
-        foreach ($entrys AS $e)
+        foreach ($entrys as $e)
             if (!$zip->add($dir . '/' . $e, PCLZIP_OPT_REMOVE_PATH, $dir))
                 return false;
 
@@ -457,9 +468,9 @@
     function chmods($dir, $entrys, $folder, $file)
     {
         $folder = intval($folder, 8);
-        $file = intval($file, 8);
+        $file   = intval($file, 8);
 
-        foreach ($entrys AS $e) {
+        foreach ($entrys as $e) {
             $path = $dir . '/' . $e;
 
             if (@is_file($path)) {
@@ -492,88 +503,48 @@
 
     function grab($url, $ref = '', $cookie = '', $user_agent = '', $header = '')
     {
-        if (function_exists('curl_init')) {
-            $ch = curl_init();
+        $ch = curl_init();
 
-            $headers[] = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
-            $headers[] = 'Accept-Language: en-us,en;q=0.5';
-            $headers[] = 'Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7';
-            $headers[] = 'Keep-Alive: 300';
-            $headers[] = 'Connection: Keep-Alive';
-            $headers[] = 'Content-type: application/x-www-form-urlencoded;charset=UTF-8';
+        $headers[] = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
+        $headers[] = 'Accept-Language: en-us,en;q=0.5';
+        $headers[] = 'Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7';
+        $headers[] = 'Keep-Alive: 300';
+        $headers[] = 'Connection: Keep-Alive';
+        $headers[] = 'Content-type: application/x-www-form-urlencoded;charset=UTF-8';
 
-            curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_URL, $url);
 
-            if ($user_agent)
-                curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
-            else
-                curl_setopt($ch, CURLOPT_USERAGENT, 'Nokia3110c/2.0 (04.91) Profile/MIDP-2.0 Configuration/CLDC-1.1');
+        if ($user_agent)
+            curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+        else
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Nokia3110c/2.0 (04.91) Profile/MIDP-2.0 Configuration/CLDC-1.1');
 
-            if ($header)
-                curl_setopt($ch, CURLOPT_HEADER, 1);
-            else
-                curl_setopt($ch, CURLOPT_HEADER, 0);
+        if ($header)
+            curl_setopt($ch, CURLOPT_HEADER, 1);
+        else
+            curl_setopt($ch, CURLOPT_HEADER, 0);
 
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-            if ($ref)
-                curl_setopt($ch, CURLOPT_REFERER, $ref);
-            else
-                curl_setopt($ch, CURLOPT_REFERER, 'http://www.google.com.vn/search?hl=vi&client=firefox-a&rls=org.mozilla:en-US:official&hs=hKS&q=video+clip&start=20&sa=N');
+        if ($ref)
+            curl_setopt($ch, CURLOPT_REFERER, $ref);
+        else
+            curl_setopt($ch, CURLOPT_REFERER, 'http://www.google.com.vn/search?hl=vi&client=firefox-a&rls=org.mozilla:en-US:official&hs=hKS&q=video+clip&start=20&sa=N');
 
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-            if (strncmp($url, 'https', 6))
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        if (strncmp($url, 'https', 6))
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
-            if ($cookie)
-                curl_setopt($ch, CURLOPT_COOKIE, $cookie);
+        if ($cookie)
+            curl_setopt($ch, CURLOPT_COOKIE, $cookie);
 
-            curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 100);
 
-            $html = curl_exec($ch);
-            $mess_error = curl_error($ch);
+        $html       = curl_exec($ch);
+        $mess_error = curl_error($ch);
 
-            curl_close($ch);
-        } else {
-            $matches = parse_url($url);
-            $host = $matches['host'];
-            $link = (isset($matches['path']) ? $matches['path'] : '/') . (isset($matches['query']) ? '?' . $matches['query'] : '') . (isset($matches['fragment']) ? '#' . $matches['fragment'] : '');
-            $port = !empty($matches['port']) ? $matches['port'] : 80;
-            $fp = @fsockopen($host, $port, $errno, $errval, 30);
-
-            if (!$fp) {
-                $html = "$errval ($errno)<br />\n";
-            } else {
-                if (!$ref)
-                    $ref = 'http://www.google.com.vn/search?hl=vi&client=firefox-a&rls=org.mozilla:en-US:official&hs=hKS&q=video+clip&start=20&sa=N';
-
-                $rand_ip = rand(1, 254) . "." . rand(1, 254) . "." . rand(1, 254) . "." . rand(1, 254);
-                $out  = "GET $link HTTP/1.1\r\n" .
-                        "Host: $host\r\n" .
-                        "Referer: $ref\r\n" .
-                        "Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5\r\n";
-
-                if ($cookie)
-                    $out .= "Cookie: $cookie\r\n";
-
-                if ($user_agent)
-                    $out .= "User-Agent: " . $user_agent . "\r\n";
-                else
-                    $out .= "User-Agent: " . 'Nokia3110c/2.0 (04.91) Profile/MIDP-2.0 Configuration/CLDC-1.1' . "\r\n";
-
-                $out .= "X-Forwarded-For: $rand_ip\r\n".
-                        "Via: CB-Prx\r\n" .
-                        "Connection: Close\r\n\r\n";
-
-                fwrite($fp, $out);
-
-                while (!feof($fp))
-                    $html .= fgets($fp, 4096);
-
-                fclose($fp);
-            }
-        }
+        curl_close($ch);
 
         return $html;
     }
@@ -592,12 +563,12 @@
 
     function page($current, $total, $url)
     {
-        $html = '<div class="page">';
-        $center = PAGE_NUMBER - 2;
-        $link = array();
+        $html                   = '<div class="page">';
+        $center                 = PAGE_NUMBER - 2;
+        $link                   = array();
         $link[PAGE_URL_DEFAULT] = isset($url[PAGE_URL_DEFAULT]) ? $url[PAGE_URL_DEFAULT] : null;
-        $link[PAGE_URL_START] = isset($url[PAGE_URL_START]) ? $url[PAGE_URL_START] : null;
-        $link[PAGE_URL_END] = isset($url[PAGE_URL_END]) ? $url[PAGE_URL_END] : null;
+        $link[PAGE_URL_START]   = isset($url[PAGE_URL_START]) ? $url[PAGE_URL_START] : null;
+        $link[PAGE_URL_END]     = isset($url[PAGE_URL_END]) ? $url[PAGE_URL_END] : null;
 
         if ($total <= PAGE_NUMBER) {
             for ($i = 1; $i <= $total; ++$i) {
@@ -678,38 +649,12 @@
     {
         global $jsons;
 
-        if (!function_exists('json_encode')) {
-            if ($jsons == null)
-                $jsons = new Services_JSON();
-
-            return $jsons->encode($var);
-        } else {
-            return json_encode($var);
-        }
+        return json_encode($var);
     }
 
     function jsonDecode($var, $isAssoc = false)
     {
-        global $jsons;
-
-        $out = null;
-
-        if (!function_exists('json_decode')) {
-            if ($jsons == null)
-                $jsons = new Services_JSON();
-
-            if ($isAssoc)
-                $jsons->setUse(SERVICES_JSON_LOOSE_TYPE);
-
-            $out =  $jsons->decode($var);
-
-            if ($isAssoc)
-                $jsons->setUse(0);
-        } else {
-            $out = json_decode($var, $isAssoc);
-        }
-
-        return $out;
+        return json_decode($var, $isAssoc);
     }
 
     function countStringArray($array, $search, $isLowerCase = false)
@@ -717,7 +662,7 @@
         $count = 0;
 
         if ($array != null && is_array($array)) {
-            foreach ($array AS $entry) {
+            foreach ($array as $entry) {
                 if ($isLowerCase)
                     $entry = strtolower($entry);
 
@@ -734,7 +679,7 @@
         if ($array == null || !is_array($array))
             return false;
 
-        foreach ($array AS $entry) {
+        foreach ($array as $entry) {
             if ($isLowerCase)
                 $entry = strtolower($entry);
 
@@ -759,13 +704,13 @@
 
         if ($path != null && $path != '/' && strpos($path, '/') !== false) {
             $array = explode('/', preg_replace('|^/(.*?)$|', '\1', $path));
-            $item = null;
-            $url = null;
+            $item  = null;
+            $url   = null;
 
-            foreach ($array AS $key => $entry) {
+            foreach ($array as $key => $entry) {
                 if ($key === 0) {
                     $seperator = preg_match('|^\/(.*?)$|', $path) ? '/' : null;
-                    $item = $seperator . $entry;
+                    $item      = $seperator . $entry;
                 } else {
                     $item = '/' . $entry;
                 }
@@ -775,7 +720,7 @@
                 else
                     $html .= '<span class="path_seperator">/</span>';
 
-                $url .= $item;
+                $url  .= $item;
                 $html .= '<span class="path_entry">' . substring($entry, 0, NAME_SUBSTR, NAME_SUBSTR_ELLIPSIS) . '</span>';
 
                 if ($key < count($array) - 1 || ($key == count($array) - 1 && $isHrefEnd))
@@ -791,7 +736,7 @@
         if ($path = getenv('PATH')) {
             $array = @explode(strpos($path, ':') !== false ? ':' : PATH_SEPARATOR, $path);
 
-            foreach ($array AS $entry) {
+            foreach ($array as $entry) {
                 if (strstr($entry, 'php.exe') && isset($_SERVER['WINDIR']) && is_file($entry)) {
                     return $entry;
                 } else {
@@ -806,7 +751,7 @@
         return 'php';
     }
 
-    function isFunctionExecEnable()
+    function isFunctionExecEnable(): bool
     {
         return function_exists('exec') && isFunctionDisable('exec') == false;
     }
@@ -819,7 +764,7 @@
             $func = strtolower(trim($func));
             $list = explode(',', $list);
 
-            foreach ($list AS $e)
+            foreach ($list as $e)
                 if (strtolower(trim($e)) == $func)
                     return true;
         }
@@ -836,8 +781,8 @@
 
     include_once 'development.inc.php';
 
-    $dir = isset($_GET['dir']) && !empty($_GET['dir']) ? rawurldecode($_GET['dir']) : null;
-    $name = isset($_GET['name']) && !empty($_GET['name']) ? $_GET['name'] : null;
+    $dir       = isset($_GET['dir']) && !empty($_GET['dir']) ? rawurldecode($_GET['dir']) : null;
+    $name      = isset($_GET['name']) && !empty($_GET['name']) ? $_GET['name'] : null;
     $dirEncode = $dir != null ? rawurlencode($dir) : null;
 
     include_once 'permission.inc.php';

@@ -1,13 +1,9 @@
 <?php
 
 $data = array(
-    'count' => '5',
+    'count' => '6',
     'version' => '1.0',
     'link' => 'https://raw.githubusercontent.com/PMTpro/manager/develop/manager/manager.zip'
 );
 
-header("Content-type: application/json; charset=utf-8");
-
-echo json_encode($data);
-
-exit();
+file_put_contents('update.json', json_encode($data));
