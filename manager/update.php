@@ -16,25 +16,26 @@
 
     include 'version.inc.php';
 
-    $server = 'https://raw.githubusercontent.com/PMTpro/manager/develop/manager/update.json';
-    $info = json_decode(grab($server), 1);
-    $info['count'] = isset($info['count']) ? $info['count'] : 0;
-    $info['version'] = isset($info['version']) ? $info['version'] : '';
-    $info['link'] = isset($info['link']) ? $info['link'] : '';
+    $server          = 'https://raw.githubusercontent.com/pmtpro/php-manager/develop/manager/update.json';
+    $info            = json_decode(grab($server), 1);
+    $info['count']   = $info['count'] ?? 0;
+    $info['version'] = $info['version'] ?? '';
+    $info['link']    = $info['link'] ?? '';
 
     if (intval($info['count']) === $count && $info['version'] === $version) {
         echo '<div class="list">Bạn đang sử dụng phiên bản manager mới nhất</div>';
     } else {
         if (isset($_POST['submit'])) {
             if (!isset($_POST['token']) || !isset($_SESSION['token']) || $_POST['token'] != $_SESSION['token']) {
-                unset($_SESSION['token']);
                 goURL('update.php');
             }
+
+            unset($_SESSION['token']);
 
             $file = 'manager.zip';
 
             if (import($info['link'], $file)) {
- 
+
                 include 'pclzip.lib.php';
 
                 $zip = new PclZip($file);
@@ -46,24 +47,11 @@
                 } else {
                     echo '<div class="list">Lỗi! Không thể cài đặt bản cập nhật</div>';
                 }
-
-                /*
-                $zip = new ZipArchive;
-                if ($zip->open($file) === true) {
-                    $zip->extractTo(dirname(__FILE__));
-                    $zip->close();
-                    @unlink($file);
-
-                    echo '<div class="list">Cập nhật thành công</div>';
-                } else {
-                    echo '<div class="list">Lỗi</div>';
-                }
-            */
             } else {
                 echo '<div class="list">Lỗi! Không thể tải bản  cập nhật</div>';
             }
         } else {
-            $token = time();
+            $token             = time();
             $_SESSION['token'] = $token;
 
             // print_r($info);
