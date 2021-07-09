@@ -25,17 +25,6 @@
     }
 
 
-    // Check require class
-    {
-        $require = [];
-
-        foreach ($require as $class) {
-            if (!class_exists($class)) {
-                exit($class . ' not found');
-            }
-        }
-    }
-
     {
         $dir = getenv('SCRIPT_NAME');
         $dir = str_replace('\\', '/', $dir);
@@ -51,7 +40,7 @@
     }
 
     define('REALPATH', realpath('./'));
-    const PATH_CONFIG                 = 'config.inc.php';
+    const PATH_CONFIG                 = __DIR__ . 'config.inc.php';
     const LOGIN_USERNAME_DEFAULT      = 'Admin';
     const LOGIN_PASSWORD_DEFAULT      = '12345';
     const PAGE_LIST_DEFAULT           = 120;
@@ -130,7 +119,7 @@
         }
     }
 
-    $login = (isset($_COOKIE['login']) && $_COOKIE['login'] == $configs['password']) ? true : false;
+    $login = isset($_COOKIE['login']) && $_COOKIE['login'] == $configs['password'];
     define('IS_LOGIN', $login);
 
     function createConfig($username = LOGIN_USERNAME_DEFAULT, $password = LOGIN_PASSWORD_DEFAULT, $pageList = PAGE_LIST_DEFAULT, $pageFileEdit = PAGE_FILE_EDIT_DEFAULT, $pageFileEditLine = PAGE_FILE_EDIT_LINE_DEFAULT, $isEncodePassword = true)
@@ -172,7 +161,7 @@
         exit(0);
     }
 
-    function getPasswordEncode($pass)
+    function getPasswordEncode($pass): string
     {
         return md5(md5(trim($pass)));
     }
@@ -255,7 +244,7 @@
         return $var;
     }
 
-    function isNameError($var)
+    function isNameError($var): bool
     {
         return strpos($var, '\\') !== false || strpos($var, '/') !== false;
     }
@@ -312,7 +301,8 @@
 
         if ($handler !== false) {
             if ($isParent && $old != '/') {
-                $end = $new = $new . '/' . end(explode('/', $old));
+                $arr = explode('/', $old);
+                $end = $new = $new . '/' . end($arr);
 
                 if (@is_file($end) || (!@is_dir($end) && !@mkdir($end)))
                     return false;
@@ -561,14 +551,14 @@
         return true;
     }
 
-    function page($current, $total, $url)
+    function page($current, $total, $url): string
     {
         $html                   = '<div class="page">';
         $center                 = PAGE_NUMBER - 2;
         $link                   = array();
-        $link[PAGE_URL_DEFAULT] = isset($url[PAGE_URL_DEFAULT]) ? $url[PAGE_URL_DEFAULT] : null;
-        $link[PAGE_URL_START]   = isset($url[PAGE_URL_START]) ? $url[PAGE_URL_START] : null;
-        $link[PAGE_URL_END]     = isset($url[PAGE_URL_END]) ? $url[PAGE_URL_END] : null;
+        $link[PAGE_URL_DEFAULT] = $url[PAGE_URL_DEFAULT] ?? null;
+        $link[PAGE_URL_START]   = $url[PAGE_URL_START] ?? null;
+        $link[PAGE_URL_END]     = $url[PAGE_URL_END] ?? null;
 
         if ($total <= PAGE_NUMBER) {
             for ($i = 1; $i <= $total; ++$i) {
@@ -657,7 +647,7 @@
         return json_decode($var, $isAssoc);
     }
 
-    function countStringArray($array, $search, $isLowerCase = false)
+    function countStringArray($array, $search, $isLowerCase = false): int
     {
         $count = 0;
 
@@ -787,4 +777,3 @@
 
     include_once 'permission.inc.php';
 
-?>

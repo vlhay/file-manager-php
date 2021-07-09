@@ -3,28 +3,27 @@
     if (!defined('ACCESS') || !defined('DEVELOPMENT'))
         die('Not access');
 
-    define('DEVELOPMENT_FILE', 'development.count');
-    define('DEVELOPMENT_INC', 'development.inc.php');
-    define('VERSION_INC', 'version.inc.php');
+    const DEVELOPMENT_FILE = 'development.count';
+    const DEVELOPMENT_INC  = 'development.inc.php';
+    const VERSION_INC      = 'version.inc.php';
 
-    $files = array();
-    $times = array();
-    $count = 1;
-    $version = '0.0.1';
-    $isCreator = true;
+    $files      = array();
+    $times      = array();
+    $count      = 1;
+    $version    = '0.0.1';
+    $isCreator  = true;
     $isModifier = false;
 
     if (DEVELOPMENT) {
         $handler = @scandir(REALPATH);
 
-        foreach ($handler AS $entry) {
+        foreach ($handler as $entry) {
             if ($entry != '.' &&
                 $entry != '..' &&
                 $entry != basename(PATH_CONFIG) &&
                 $entry != basename(DEVELOPMENT_FILE) &&
                 $entry != basename(DEVELOPMENT_INC) &&
-                $entry != basename(VERSION_INC) && is_file(REALPATH . '/' . $entry))
-            {
+                $entry != basename(VERSION_INC) && is_file(REALPATH . '/' . $entry)) {
                 $files[] = $entry;
                 $times[] = filemtime(REALPATH . '/' . $entry);
             }
@@ -38,9 +37,9 @@
             if ($json !== null) {
                 $entryFiles = $json['files'];
                 $entryTimes = $json['times'];
-                $count = intval($json['count']);
-                $version = $json['version'];
-                $isCreator = false;
+                $count      = intval($json['count']);
+                $version    = $json['version'];
+                $isCreator  = false;
 
                 if (count($files) != count($entryFiles) || count($times) != count($entryTimes)) {
                     $isModifier = true;
@@ -57,9 +56,9 @@
                 }
 
                 if ($isModifier) {
-                    $count += 1;
-                    $length = strlen($count);
-                    $version = null;
+                    $count     += 1;
+                    $length    = strlen($count);
+                    $version   = null;
                     $isCreator = true;
 
                     if ($length > 4)
@@ -93,12 +92,10 @@
     if (!DEVELOPMENT && is_file(REALPATH . '/' . DEVELOPMENT_FILE))
         @unlink(REALPATH . '/' . DEVELOPMENT_FILE);
 
-    define('AUTHOR', 'Izero');
+    const AUTHOR = 'Izero';
     define('VERSION', $version);
 
     unset($files);
     unset($times);
     unset($count);
     unset($version);
-
-?>
