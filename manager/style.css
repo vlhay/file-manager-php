@@ -68,7 +68,8 @@ input[type=submit]:hover {
 
 input[type=checkbox],
 input[type=radio] {
-    padding: 1px !important;
+    padding: 4px !important;
+    margin-right: 4px;
 }
 
 input,
@@ -78,7 +79,7 @@ textarea {
     background: #ffffff;
     border: 1px solid #cecece;
     padding: 6px;
-    margin: 3px;
+    margin: 5px auto;
 }
 
 input:focus,
