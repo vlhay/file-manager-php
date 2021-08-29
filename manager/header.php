@@ -1,7 +1,7 @@
 <?php if (!defined('ACCESS')) die('Not access'); ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="vi">
+<!DOCTYPE html>
+<html lang="vi">
     <head>
         <title><?php echo $title; ?></title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -14,11 +14,11 @@
     <body>
         <div id="header">
             <ul>
-                <li><a href="index.php"><img src="icon/home.png"/></a></li>
+                <li><a href="index.php"><img src="icon/home.png" /></a></li>
                 <?php if (!IS_INSTALL_ROOT_DIRECTORY && IS_LOGIN) { ?>
-                    <li><a href="pma/"><img src="icon/database.png"/></a></li>
-                    <li><a href="setting.php"><img src="icon/setting.png"/></a></li>
-                    <li><a href="exit.php"><img src="icon/exit.png"/></a></li>
+                    <li><a href="pma/"><img src="icon/database.png" /></a></li>
+                    <li><a href="setting.php"><img src="icon/setting.png" /></a></li>
+                    <li><a href="exit.php"><img src="icon/exit.png" /></a></li>
                 <?php } ?>
             </ul>
         </div>

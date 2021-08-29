@@ -40,7 +40,7 @@
     }
 
     define('REALPATH', realpath('./'));
-    const PATH_CONFIG                 = __DIR__ . 'config.inc.php';
+    const PATH_CONFIG                 = __DIR__ . '/config.inc.php';
     const LOGIN_USERNAME_DEFAULT      = 'Admin';
     const LOGIN_PASSWORD_DEFAULT      = '12345';
     const PAGE_LIST_DEFAULT           = 120;
@@ -122,7 +122,7 @@
     $login = isset($_COOKIE['login']) && $_COOKIE['login'] == $configs['password'];
     define('IS_LOGIN', $login);
 
-    function createConfig($username = LOGIN_USERNAME_DEFAULT, $password = LOGIN_PASSWORD_DEFAULT, $pageList = PAGE_LIST_DEFAULT, $pageFileEdit = PAGE_FILE_EDIT_DEFAULT, $pageFileEditLine = PAGE_FILE_EDIT_LINE_DEFAULT, $isEncodePassword = true)
+    function createConfig($username = LOGIN_USERNAME_DEFAULT, $password = LOGIN_PASSWORD_DEFAULT, $pageList = PAGE_LIST_DEFAULT, $pageFileEdit = PAGE_FILE_EDIT_DEFAULT, $pageFileEditLine = PAGE_FILE_EDIT_LINE_DEFAULT, $isEncodePassword = true): bool
     {
         $content = "<?php if (!defined('ACCESS')) die('Not access'); else \$configs = array(";
         $content .= "'username' => '$username', ";
@@ -132,21 +132,23 @@
         $content .= "'page_file_edit_line' => '$pageFileEditLine'";
         $content .= '); ?>';
 
-        if (@is_file(REALPATH . '/' . PATH_CONFIG))
-            @unlink(REALPATH . '/' . PATH_CONFIG);
+        if (is_file(PATH_CONFIG)) {
+            unlink(PATH_CONFIG);
+        }
 
-        $put = @file_put_contents(REALPATH . '/' . PATH_CONFIG, $content);
+        $put = file_put_contents(PATH_CONFIG, $content);
 
         if ($put) {
             return true;
         } else {
-            $handler = @fopen(REALPATH . '/' . PATH_CONFIG, "w+");
+            $handler = @fopen(PATH_CONFIG, "w+");
 
             if ($handler) {
-                if (@fwrite($handler, $content))
+                if (@fwrite($handler, $content)) {
                     @fclose($handler);
-                else
+                } else {
                     return false;
+                }
             } else {
                 return false;
             }

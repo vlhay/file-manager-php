@@ -1,7 +1,7 @@
 <?php
 
-    define('ACCESS', true);
-    define('LOGIN', true);
+    const ACCESS = true;
+    const LOGIN  = true;
 
     include_once 'function.php';
 
@@ -40,17 +40,17 @@
         echo $notice;
 
         if (IS_CONFIG_UPDATE || IS_CONFIG_ERROR)
-            @unlink(REALPATH . '/' . PATH_CONFIG);
+            @unlink(PATH_CONFIG);
 
         if (IS_CONFIG_UPDATE)
             echo '<div class="notice_info">Cấu hình cập nhật sẽ đưa về mặc định</div>';
         else if (IS_CONFIG_ERROR)
             echo '<div class="notice_failure">Cấu hình bị lỗi sẽ đưa về mặc định</div>';
-        else if (!is_file(REALPATH . '/' . PATH_CONFIG))
+        else if (!is_file(PATH_CONFIG))
             echo '<div class="notice_info">Cấu hình không tồn tại nó sẽ được tạo</div>';
 
 
-        if (!is_file(REALPATH . '/' . PATH_CONFIG)) {
+        if (!is_file(PATH_CONFIG)) {
             if (createConfig())
                 echo '<div class="notice_info">Tài khoản: <strong>' . LOGIN_USERNAME_DEFAULT . '</strong>, Mật khẩu: <strong>' . LOGIN_PASSWORD_DEFAULT . '</strong></div>';
             else
@@ -69,5 +69,3 @@
 
         include_once 'footer.php';
     }
-
-?>

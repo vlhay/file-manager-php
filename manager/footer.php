@@ -2,7 +2,7 @@
 
         </div>
         <div id="footer">
-            <span>&bull; &bull; IZeroCs &bull; &bull;</span>
+            <span style="font-size: large">&bull; &bull; IZeroCs &bull; &bull;</span>
         </div>
     </body>
 </html>
