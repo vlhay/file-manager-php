@@ -1,7 +1,7 @@
 <?php
 
-    define('ACCESS', true);
-    define('INDEX', true);
+    const ACCESS = true;
+    const INDEX  = true;
 
     include_once 'function.php';
 

@@ -1,4 +1,5 @@
-<?php define('ACCESS', true);
+<?php
+    const ACCESS = true;
 
     include_once 'function.php';
 

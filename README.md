@@ -1,6 +1,12 @@
-# manager
+# PHP File Manager
+
 PHP File Manager by Izero
 
-**Default Account Admin:**
+Edit by PMTpro
+
+## Default Account Admin
   * Username: admin
   * Password: 12345
+
+## Demo
+

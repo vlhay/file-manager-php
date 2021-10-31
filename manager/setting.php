@@ -89,14 +89,12 @@
         <div class="title">Chức năng</div>
         <ul class="list">';
 
-    if ($ref != null)
+    if ($ref != null) {
         echo '<li><img src="icon/back.png" alt=""/> <a href="' . $ref . '">Quay lại</a></li>';
-    else
+    } else {
         echo '<li><img src="icon/list.png" alt=""/> <a href="index.php">Danh sách</a></li>';
+    }
 
     echo '</ul>';
 
     include_once 'footer.php';
-
-
-?>
